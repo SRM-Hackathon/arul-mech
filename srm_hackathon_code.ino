@@ -37,7 +37,7 @@ char call;
 void setup()
 {
   Serial.begin(9600);
-  PinMode(9,OUTPUT);
+`  PinMode(9,OUTPUT);
   PinMode(10,OUTPUT);
   PinMode(inputPin,INPUT);
   PinMode(trigPin1,OUTPUT);
@@ -128,3 +128,49 @@ lcd.clear();
   lcd.clear();
   distance1= 10;
  }
+ if ((distance1 <=8) )
+ {
+lcd.clear();
+  lcd.print("Garbage Opening");
+  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(9,HIGH);
+  digitalWrite(10,LOW);
+  delay(3000);
+  digitalWrite(9,LOW);
+  digitalWrite(10,LOW);
+  delay(5000);
+  lcd.clear();
+  lcd.print("Dumpster Closing");
+  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(9,LOW);
+  digitalWrite(10,HIGH);
+  delay(3000);
+  digitalWrite(9,LOW);
+  digitalWrite(10,LOW);
+  delay(3000);
+  lcd.clear();
+  }
+  if ((distance2 >=100) )
+ {
+lcd.clear();
+  lcd.print("Garbage ");
+  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(9,HIGH);
+  digitalWrite(10,LOW);
+  delay(3000);
+  digitalWrite(9,LOW);
+  digitalWrite(10,LOW);
+  delay(5000);
+  lcd.clear();
+  lcd.print("Dumpster Closing");
+  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(9,LOW);
+  digitalWrite(10,HIGH);
+  delay(3000);
+  digitalWrite(9,LOW);
+  digitalWrite(10,LOW);
+  delay(3000);
+  lcd.clear();
+  }
+  
+ 
