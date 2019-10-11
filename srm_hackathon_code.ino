@@ -101,6 +101,30 @@ if ( (distance1 <=8)&& (range ==0) )
   delay(2000);
   digitalWrite(9,LOW);
   digitalWrite(10,LOW);
-  
-  
+  delay(1500);
+  lcd.clear();
+  distance1=10;
 }
+ if ((distance<=8)&&(range==1) )
+ {
+lcd.clear();
+  lcd.print("Garbage Opening");
+  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(9,HIGH);
+  digitalWrite(10,LOW);
+  delay(3000);
+  digitalWrite(9,LOW);
+  digitalWrite(10,LOW);
+  delay(5000);
+  lcd.clear();
+  lcd.print("Dumpster Closing");
+  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(9,LOW);
+  digitalWrite(10,HIGH);
+  delay(3000);
+  digitalWrite(9,LOW);
+  digitalWrite(10,LOW);
+  delay(3000);
+  lcd.clear();
+  distance1= 10;
+ }
