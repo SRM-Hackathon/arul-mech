@@ -12,7 +12,7 @@ int maximumrange2 = 200;
 int minimumrange2 = 5;
 long duration2, distance2;
 
-const int sensorMin = 0;    
+const int sensorMin = 0;     
 const int sensorMax = 1024; 
 int range;
 
@@ -26,30 +26,29 @@ int val = 0;
 
 int a;
 
-
+#include <SoftwareSerial.h>
+SoftwareSerial mySerial(11, 12);
 char msg;
 char call;
-
 
 void setup()
 {
   Serial.begin(9600);
-  
   pinMode(9, OUTPUT); 
   pinMode(10, OUTPUT); 
   pinMode(inputPin, INPUT); 
-  pinMode(trigpin1, OUTPUT); 
+  pinMode(trigpin1, OUTPUT);
   pinMode(echopin1, INPUT); 
   pinMode(trigpin2, OUTPUT);
   pinMode(echopin2, INPUT);
  
- 
+  
   lcd.begin();
   lcd.backlight();
   pinMode(LED_BUILTIN, OUTPUT); 
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("WELCOME TO");
+  lcd.print("Welcome To");
   lcd.setCursor(0, 1);
   lcd.print("SMART DUMPSTER");
   delay(2000);
@@ -59,6 +58,7 @@ void setup()
 void loop()
 {
   range = 3;
+  
   ultrasonic1();
   ultrasonic2();
  
@@ -73,9 +73,9 @@ void loop()
       //Serial.println("Motion detected!");
       lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print("Motin Detected");
+      lcd.print("MOTION DETECTED");
       lcd.setCursor(0, 1);
-      lcd.print("Inside Dumpster");
+      lcd.print("Inside Garbage");
       pirState = HIGH;
       delay(2000);
       SendMessage2();
@@ -86,16 +86,14 @@ void loop()
   {
     if (pirState == HIGH)
     {
-      //      Serial.println("Motion ended");
       pirState = LOW;
     }
   }
- 
+  
   if (  ( distance1 <= 8 ) &&  ( range == 0)   )
   {
-    //Serial.println("object detected");
     lcd.clear();
-    lcd.print("Dumpster Opening");
+    lcd.print("GARBAGE OPENING");
     digitalWrite(LED_BUILTIN, HIGH);
     digitalWrite(9, HIGH); 
     digitalWrite(10, LOW);
@@ -104,7 +102,7 @@ void loop()
     digitalWrite(10, LOW);
     delay(2000);
     lcd.clear();
-    lcd.print("Dumpster Closing");
+    lcd.print("GARBAGE CLOSING");
     digitalWrite(LED_BUILTIN, LOW);
     digitalWrite(9, LOW);
     digitalWrite(10, HIGH);
@@ -118,9 +116,8 @@ void loop()
 
   if (  ( distance1 <= 8 ) &&  ( range == 1)  )
   {
-    //Serial.println("object detected");
     lcd.clear();
-    lcd.print("GARBAGE OPENING");
+    lcd.print("Dumpster Opening");
     digitalWrite(LED_BUILTIN, HIGH);
     digitalWrite(9, HIGH); 
     digitalWrite(10, LOW);
@@ -146,10 +143,10 @@ void loop()
     lcd.clear();
     lcd.print("Dumpster Opening");
     digitalWrite(LED_BUILTIN, HIGH);
-    digitalWrite(9, HIGH);
+    digitalWrite(9, HIGH); 
     digitalWrite(10, LOW);
     delay(3000);
-    digitalWrite(9, LOW); 
+    digitalWrite(9, LOW);
     digitalWrite(10, LOW);
     delay(5000);
     lcd.clear();
@@ -162,9 +159,9 @@ void loop()
     digitalWrite(10, LOW);
     delay(3000);
     lcd.clear();
-    //distance1 = 10;
   }
 
+ 
   if ( distance2 >= 100 )
   {
     lcd.clear();
@@ -173,12 +170,13 @@ void loop()
     SendMessage1();
     lcd.clear();
   }
-
+  
   else
   {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Trash Level-");
+    
+    lcd.print("TRASH LEVEL-");
     if (distance2 <= 99)
     {
       lcd.setCursor(12, 0);
@@ -189,23 +187,29 @@ void loop()
     if (distance2 >= 99)
     {
       lcd.setCursor(12, 0);
-      lcd.print("Full");
+      lcd.print("FULL");
     }
     
-    if ( range == 0)
+  }
+
+  if ( range == 0)
   {
+    //Serial.println("No Rain");
+    //range = 2;
     lcd.clear();
     lcd.setCursor(0, 1);
-    lcd.print("Raining");
+    lcd.print("RAINING");
     delay(1000);
     //range = 2;
     lcd.clear();
   }
   if ( range == 1)
   {
+    //Serial.println("RAIN WARNING");
+    //range = 3;
     lcd.clear();
     lcd.setCursor(0, 1);
-    lcd.print("Rain Warning");
+    lcd.print("RAIN WARNING");
     delay(1000);
     //range = 3;
     lcd.clear();
@@ -241,9 +245,10 @@ void ultrasonic2()
     distance2 = 50;
   }
   distance2 = map(distance2, 3, 50, 100, 0);
-  //  Serial.print(distance2);
-  //  Serial.println(" %");
 }
+
+
+
 
 void rainsensor()
 {
@@ -252,17 +257,17 @@ void rainsensor()
 
   switch (range)
   {
-    case 0:     Sensor getting wet
-                Serial.println("Raining");
+    case 0:  // Sensor getting wet
+              Serial.println("Raining");
       break;
-    case 1:     Sensor getting wet
-                Serial.println("Rain Warning");
+    case 1:    // Sensor getting wet
+               Serial.println("Rain Warning");
       break;
-    case 2:     Sensor dry 
-                Serial.println("Not Raining");
+    case 2:    // Sensor dry - To shut this up delete the " Serial.println("Not Raining"); " below.
+               Serial.println("Not Raining");
       break;
   }
-  delay(1);  
+  delay(1); 
 }
 
 void lcddisplay()
@@ -274,7 +279,7 @@ void motionsensor()
 {
   val = digitalRead(inputPin);  
   if (val == HIGH)
-  {
+  { 
     if (pirState == LOW)
     {
       
@@ -285,7 +290,6 @@ void motionsensor()
   {
     if (pirState == HIGH)
     {
-      
       pirState = LOW;
     }
   }
@@ -302,13 +306,11 @@ void waitMilliseconds(uint16_t msWait)
 
 void SendMessage1()
 {
- 
   Serial.println("AT+CMGF=1");    
   delay(1000);  
-  
   Serial.println("AT+CMGS=\"+918610360497\"\r"); 
   delay(1000);
-  Serial.println("Dumpster Full Come And Clean At SRM");
+  Serial.println("DUMPSTER FULL COME AND CLEAN AT SRM");
   delay(100);
   Serial.println((char)26);
   delay(1000);
@@ -316,12 +318,14 @@ void SendMessage1()
 
 void SendMessage2()
 {
-  Serial.println("AT+CMGF=1");   
+   Serial.println("AT+CMGF=1");    
   delay(1000);  
   Serial.println("AT+CMGS=\"+918610360497\"\r"); 
   delay(1000);
-  Serial.println("Motion Detected Inside Dumpster In SRM");
+  Serial.println("MOTION DETECTED INSIDE GARBAGE AT THARAMANI");
   delay(100);
+ 
   Serial.println((char)26);
   delay(1000);
-} 
+  
+}
