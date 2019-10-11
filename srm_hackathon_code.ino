@@ -1,5 +1,5 @@
 #define echopin1 7
-#define triggerpin1 8
+#define trigpin1 8
 boolean detector1 = false;
 int maxmiumrange1 = 200;
 int minimumrange1 = 0;
@@ -33,14 +33,14 @@ void setup()
 {
   Serial.begin(9600);
   
-  PinMode(9,OUTPUT);
-  PinMode(10,OUTPUT);
-  PinMode(inputPin,INPUT);
-  PinMode(trigPin1,OUTPUT);
-  PinMode(echoPin1,INPUT);
-  PinMode(trigPin2,OUTPUT);
-  PinMode(echoPin2,INPUT);
-  lcd begin();
+  pinMode(9,OUTPUT);
+  pinMode(10,OUTPUT);
+  pinMode(inputPin,INPUT);
+  pinMode(trigpin1,OUTPUT);
+  pinMode(echopin1,INPUT);
+  pinMode(trigpin2,OUTPUT);
+  pinMode(echopin2,INPUT);
+  lcd.begin();
   lcd.backlight();
   pinMode(LED_BUILTIN,OUTPUT);
   lcd.clear();
@@ -52,26 +52,25 @@ void setup()
   lcd.clear();
 }
 
-void loop();
+void loop()
 
 {
-  range=3;
-  //gsm();
+  range = 3;
   ultrasonic1();
   ultrasonic2();
   
   int sensorReading = analogRead(A2);
-  int range =map(sensorReading, sensorMin, sensorMax, 0, 3);
+  int range = map(sensorReading, sensorMin, sensorMax, 0, 3);
 
-  val=digitalRead(inputPin):
-  if(val==HIGH);
+  val = digitalRead(inputPin);
+  if(val == HIGH);
   {
-    if(pinstate==LOW);
+    if(pinState == LOW);
     {
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.print("Motion Detected");
-      lcd.setCursor(0,1)
+      lcd.setCursor(0,1);
       lcd.print("Inside Dumpster");
       pirState = HIGH;
       delay(2000);
@@ -81,10 +80,12 @@ void loop();
   }
 else 
 {
-  pirStatus=LOW;
- 
-}
-}
+    if (pirState == HIGH)
+    {
+      Serial.println("Motion ended!");
+      pirState = LOW;
+    }
+  }
 
 if ( (distance1 <=8)&& (range ==0) )
 {
@@ -109,7 +110,7 @@ if ( (distance1 <=8)&& (range ==0) )
   lcd.clear();
   distance1=10;
 }
- if ((distance<=8)&&(range==1) )
+ if ((distance <=8 )&&(range == 1) )
  {
 lcd.clear();
   lcd.print("Garbage Opening");
@@ -134,7 +135,7 @@ lcd.clear();
  }
  if ((distance1 <=8) )
  {
-lcd.clear();
+  lcd.clear();
   lcd.print("Garbage Opening");
   digitalWrite(LED_BUILTIN, HIGH);
   digitalWrite(9,HIGH);
@@ -265,26 +266,27 @@ lcd.clear();
     pirState=LOW;
    }
   }
-  void waitMilliseconds(unit16_t msWait)
+  void waitMilliseconds(uint16_t msWait)
   {
    unit32_t start = millis();
    while ((millis()-strat) <msWait)
    delay(1);
   }
-   }
-  Void SendMessage1()
+   
+   
+  void SendMessage1()
   {
     Serial.println("AT+CMGF=1");
     delay(1000);
     Serial.println("AT+CMGF=\"+918610360497\"\r");
     delay(1000);
-    serial,println("Dumpster Full Come And Clean At SRM");
+    serial,println("Dumpster Full At SRM Come And Clean");
     delay(1000);
     Serial.println((char)26);
     delay(1000);
   }
 
-  Void SendMessage2()
+  void SendMessage2()
   {
     Serial.println("AT+CMGF=1");
     delay(1000);
