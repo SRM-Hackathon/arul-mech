@@ -259,8 +259,40 @@ lcd.clear();
     pirState=HIGH;
     }
    }
-   
-  
-   
+   else
+   {
+    if (pirState==HIGH)
+    pirState=LOW;
+   }
+  }
+  void waitMilliseconds(unit16_t msWait)
+  {
+   unit32_t start = millis();
+   while ((millis()-strat) <msWait)
+   delay(1);
+  }
+   }
+  Void SendMessage1()
+  {
+    Serial.println("AT+CMGF=1");
+    delay(1000);
+    Serial.println("AT+CMGF=\"+918610360497\"\r");
+    delay(1000);
+    serial,println("Dumpster Full Come And Clean At SRM");
+    delay(1000);
+    Serial.println((char)26);
+    delay(1000);
+  }
 
+  Void SendMessage2()
+  {
+    Serial.println("AT+CMGF=1");
+    delay(1000);
+    Serial.println("AT+CMGF=\"+918610360497\"\r");
+    delay(1000);
+    serial,println("Motion Detected Inside Dumpster At SRM");
+    delay(1000);
+    Serial.println((char)26);
+    delay(1000);
+  }
   
