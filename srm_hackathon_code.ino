@@ -12,8 +12,8 @@ int maxmiumrange2 = 20;
 int minimumrange2 = 5;
 long duration2,distance2;
 
-Const int sensorMin =0;
-Const int sensorMax =1024;
+const int sensorMin =0;
+const int sensorMax =1024;
 int range;
 
 #include<Servo.h>
@@ -22,10 +22,10 @@ Servo Servo1;
 
 #include<Wire.h>
 #include<LiquidCrystal_I2C.h>
-LiquidCrystal_12C lcd(0 3F,16,2);
+LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
 int inputPin =2;
-Int pinStatus =LOW;
+int pinStatus =LOW;
 int val=0;
 
 int a;
@@ -37,13 +37,13 @@ char call;
 void setup()
 {
   Serial.begin(9600);
-  Pin Mode(9,OUTPUT);
-  Pin Mode(10,OUTPUT);
-  Pin Mode(inputPin,INPUT);
-  Pin Mode(trigPin1,OUTPUT);
-  Pin Mode(echoPin1,INPUT);
-  Pin Mode(trigPin2,OUTPUT);
-  Pin Mode(echoPin2,INPUT);
+  PinMode(9,OUTPUT);
+  PinMode(10,OUTPUT);
+  PinMode(inputPin,INPUT);
+  PinMode(trigPin1,OUTPUT);
+  PinMode(echoPin1,INPUT);
+  PinMode(trigPin2,OUTPUT);
+  PinMode(echoPin2,INPUT);
   lcd begin();
   lcd.back light();
   pinMode(LED_BUILTIN,OUTPUT);
@@ -76,7 +76,31 @@ void loop();
       lcd.setCursor(0,0);
       lcd.print("Motion Detected");
       lcd.setCursor(0,1)
-      
+      lcd.print("Inside Dumpster");
+      pirState = HIGH;
+            
     }
   }
+}
+if ( (distance1 <=8)&& (range ==0) )
+{
+  lcd.clear();
+  lcd.print("Garbage Opening");
+  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(9,HIGH);
+  digitalWrite(10,LOW);
+  delay(2000);
+  digitalWrite(9,LOW);
+  digitalWrite(10,LOW);
+  delay(2000);
+  lcd.clear();
+  lcd.print("Dumpster Closing");
+  digitalWrite(LED_BUILTIN, LOW);
+  digitalWrite(9,LOW);
+  digitalWrite(10,HIGH);
+  delay(2000);
+  digitalWrite(9,LOW);
+  digitalWrite(10,LOW);
+  
+  
 }
