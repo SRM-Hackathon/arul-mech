@@ -1,19 +1,19 @@
 #define echopin1 7
 #define triggerpin1 8
 boolean detector1 = false;
-int maxmiumrange1 = 80;
+int maxmiumrange1 = 200;
 int minimumrange1 = 0;
 long duration1,distance1;
 
 #define echopin2 5
-#define triggerpin2 6
+#define trigpin2 6
 boolean detector2 = false;
-int maxmiumrange2 = 20;
+int maxmiumrange2 = 200;
 int minimumrange2 = 5;
 long duration2,distance2;
 
-const int sensorMin =0;
-const int sensorMax =1024;
+const int sensorMin=0;
+const int sensorMax=2024;
 int range;
 
 #include<Wire.h>
@@ -21,8 +21,8 @@ int range;
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
 int inputPin =2;
-int pinStatus =LOW;
-int val=0;
+int pinState =LOW;
+int val = 0;
 
 int a;
 
@@ -32,6 +32,7 @@ char call;
 void setup()
 {
   Serial.begin(9600);
+  
   PinMode(9,OUTPUT);
   PinMode(10,OUTPUT);
   PinMode(inputPin,INPUT);
@@ -40,7 +41,7 @@ void setup()
   PinMode(trigPin2,OUTPUT);
   PinMode(echoPin2,INPUT);
   lcd begin();
-  lcd.back light();
+  lcd.backlight();
   pinMode(LED_BUILTIN,OUTPUT);
   lcd.clear();
   lcd.setCursor(0,0);
@@ -194,3 +195,72 @@ lcd.clear();
   delay(1000);
   lcd.clear();
   }
+  
+  void ultrasonic1()
+  {
+  detect1=0;
+  digitalWrite(trigpin1,LOW);
+  delayMicroseconds(2);
+   digitalWrite(trigpin1,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trigpin1,LOW);
+  duration1=pulseIn(echopin1,HIGH);
+  distance1=duration1/58.2;
+  }
+  
+  void ultrasonic2()
+  {
+  detect2=0;
+  digitalWrite(trigpin2,LOW);
+  delayMicroseconds(2);
+   digitalWrite(trigpin2,HIGH);
+  delayMicroseconds(2);
+  digitalWrite(trigpin2,LOW);
+  duration2=pulseIn(echopin2,HIGH);
+  distance2=duration2/58.2;
+  if(distance2>=51)
+  {
+    distance2=50;
+  }
+  distance2=map(distance2,3,50,100,0);
+  }
+
+  void rainsensor()
+  {
+  int sensorReading=analogRead(A2);
+  int range=map(sensorReading,sensorMin,sensorMax,0,3);
+  switch(range)
+  {
+    
+    case 0: Sensor getting wet
+            Serial.println("Raining");
+    break;
+     
+    case 1: sensor getting wet
+            Serial.println("Rain Warning");
+
+    case 2: sensor dry
+            Serial.println("Not Raining");
+  }
+  delay(1);
+  }
+   void lcddisplay()
+   {
+    lcdprint("Hello");
+   }
+  void motionsensor()
+  { 
+    val=digitalRead(inputPin);
+    if(val==HIGH)
+   {
+    if(pirState==LOW);
+    {
+      
+    pirState=HIGH;
+    }
+   }
+   
+  
+   
+
+  
