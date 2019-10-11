@@ -16,10 +16,6 @@ const int sensorMin =0;
 const int sensorMax =1024;
 int range;
 
-#include<Servo.h>
-int servopin =9;
-Servo Servo1;
-
 #include<Wire.h>
 #include<LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
@@ -30,14 +26,13 @@ int val=0;
 
 int a;
 
-#include <SoftwareSerial.h>
 char msg;
 char call;
 
 void setup()
 {
   Serial.begin(9600);
-`  PinMode(9,OUTPUT);
+  PinMode(9,OUTPUT);
   PinMode(10,OUTPUT);
   PinMode(inputPin,INPUT);
   PinMode(trigPin1,OUTPUT);
@@ -78,10 +73,18 @@ void loop();
       lcd.setCursor(0,1)
       lcd.print("Inside Dumpster");
       pirState = HIGH;
-            
+      delay(2000);
+      SendMessage2();
+      lcd.clear();      
     }
   }
+else 
+{
+  pirStatus=LOW;
+ 
 }
+}
+
 if ( (distance1 <=8)&& (range ==0) )
 {
   lcd.clear();
@@ -152,25 +155,42 @@ lcd.clear();
   }
   if ((distance2 >=100) )
  {
-lcd.clear();
-  lcd.print("Garbage ");
-  digitalWrite(LED_BUILTIN, HIGH);
-  digitalWrite(9,HIGH);
-  digitalWrite(10,LOW);
-  delay(3000);
-  digitalWrite(9,LOW);
-  digitalWrite(10,LOW);
-  delay(5000);
   lcd.clear();
-  lcd.print("Dumpster Closing");
-  digitalWrite(LED_BUILTIN, LOW);
-  digitalWrite(9,LOW);
-  digitalWrite(10,HIGH);
-  delay(3000);
-  digitalWrite(9,LOW);
-  digitalWrite(10,LOW);
-  delay(3000);
+  lcd.print("Garbage Full");
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(2000);
+  SendMessage1();
   lcd.clear();
   }
-  
- 
+  delay(800);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Trash Level");
+  if(distance2 <=99)
+  {
+  lcd.setCursor(12,0);
+  lcd.print(distance2);
+  lcd.setCursor(14,0);
+  lcd.print("%");
+  }
+  if(distance2 >=99)
+  {
+  lcd.setCursor(12,0);
+  lcd.print("Full");
+  }
+  if(range==0)
+  {
+  lcd.clear();
+  lcd.setCursor(0,1);
+  lcd.print("Raining");
+  delay(1000);
+  lcd.clear();  
+  }
+  if(range==1)
+  {
+  lcd.clear();
+  lcd.setCursor(0,1);
+  lcd.print("Rain Warning");
+  delay(1000);
+  lcd.clear();
+  }
