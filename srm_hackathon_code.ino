@@ -67,7 +67,7 @@ void loop()
   ultrasonic1();
   ultrasonic2();
 
-  int sensorReading = analogRead(A2);
+  int sensorReading = analogRead(A0);
   int range = map(sensorReading, sensorMin, sensorMax, 0, 3);
 
   val = digitalRead(inputPin); 
