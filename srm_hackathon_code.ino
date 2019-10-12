@@ -34,6 +34,7 @@ char call;
 void setup()
 {
   Serial.begin(9600);
+  Serial.begin(9600);
   pinMode(9, OUTPUT); 
   pinMode(10, OUTPUT); 
   pinMode(inputPin, INPUT); 
@@ -58,7 +59,6 @@ void setup()
 void loop()
 {
   range = 3;
-  
   ultrasonic1();
   ultrasonic2();
  
@@ -223,8 +223,6 @@ void ultrasonic1()
   digitalWrite(trigpin1, LOW);
   duration1 = pulseIn(echopin1, HIGH); 
   distance1 = duration1 / 58.2; 
-  //  Serial.print(distance1);
-  //  Serial.println("cm");
 }
 
 void ultrasonic2()
@@ -304,7 +302,7 @@ void SendMessage1()
   Serial.println("AT+CMGS=\"+918610360497\"\r"); 
   delay(1000);
   Serial.println("DUMPSTER FULL COME AND CLEAN AT SRM");
-  delay(1000);
+  delay(100);
   Serial.println((char)26);
   delay(1000);
 }
@@ -315,7 +313,7 @@ void SendMessage2()
   delay(1000);  
   Serial.println("AT+CMGS=\"+918610360497\"\r"); 
   delay(1000);
-  Serial.println("MOTION DETECTED INSIDE GARBAGE AT THARAMANI");
+  Serial.println("MOTION DETECTED INSIDE GARBAGE AT SRM");
   delay(100);
  
   Serial.println((char)26);
