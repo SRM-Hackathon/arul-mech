@@ -1,3 +1,4 @@
+
 #define echopin1 7
 #define trigpin1 8
 boolean detector1 = false;
@@ -13,16 +14,20 @@ int minimumrange2 = 0;
 long duration2, distance2;
 
 const int sensorMin = 0;     
-const int sensorMax = 1024; 
+const int sensorMax = 1024;  
 int range;
+
+#include <Servo.h>
+int servoPin = 9;
+Servo Servo1;
 
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
 int inputPin = 2;               
-int pirState = LOW;            
-int val = 0;                   
+int pirState = LOW;             
+int val = 0;                    
 
 int a;
 
@@ -34,15 +39,14 @@ char call;
 void setup()
 {
   Serial.begin(9600);
-  Serial.begin(9600);
+  
   pinMode(9, OUTPUT); 
-  pinMode(10, OUTPUT); 
-  pinMode(inputPin, INPUT); 
-  pinMode(trigpin1, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(inputPin, INPUT);
+  pinMode(trigpin1, OUTPUT); 
   pinMode(echopin1, INPUT); 
   pinMode(trigpin2, OUTPUT);
   pinMode(echopin2, INPUT);
- 
   
   lcd.begin();
   lcd.backlight();
@@ -59,23 +63,24 @@ void setup()
 void loop()
 {
   range = 3;
+  //gsm();
   ultrasonic1();
   ultrasonic2();
- 
+
   int sensorReading = analogRead(A2);
   int range = map(sensorReading, sensorMin, sensorMax, 0, 3);
-  
-  val = digitalRead(inputPin);  
+
+  val = digitalRead(inputPin); 
   if (val == HIGH)
   {
     if (pirState == LOW)
     {
-      //Serial.println("Motion detected!");
+      
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("MOTION DETECTED");
       lcd.setCursor(0, 1);
-      lcd.print("INSIDE DUMBSTER");
+      lcd.print("INSIDE DUMPSTER");
       pirState = HIGH;
       delay(2000);
       SendMessage2();
@@ -89,15 +94,16 @@ void loop()
       pirState = LOW;
     }
   }
-  
+
   if (  ( distance1 <= 8 ) &&  ( range == 0)   )
   {
+    
     lcd.clear();
     lcd.print("DUMPSTER OPENING");
     digitalWrite(LED_BUILTIN, HIGH);
     digitalWrite(9, HIGH); 
     digitalWrite(10, LOW);
-    delay(2000);
+    delay(2000);//180 degree turn
     digitalWrite(9, LOW); 
     digitalWrite(10, LOW);
     delay(2000);
@@ -116,13 +122,14 @@ void loop()
 
   if (  ( distance1 <= 8 ) &&  ( range == 1)  )
   {
+    
     lcd.clear();
     lcd.print("DUMPSTER OPENING");
     digitalWrite(LED_BUILTIN, HIGH);
     digitalWrite(9, HIGH); 
     digitalWrite(10, LOW);
     delay(3000);
-    digitalWrite(9, LOW);
+    digitalWrite(9, LOW); 
     digitalWrite(10, LOW);
     delay(5000);
     lcd.clear();
@@ -145,7 +152,7 @@ void loop()
     digitalWrite(LED_BUILTIN, HIGH);
     digitalWrite(9, HIGH); 
     digitalWrite(10, LOW);
-    delay(3000);
+    delay(3000);//180 degree turn
     digitalWrite(9, LOW);
     digitalWrite(10, LOW);
     delay(5000);
@@ -159,9 +166,10 @@ void loop()
     digitalWrite(10, LOW);
     delay(3000);
     lcd.clear();
+    //distance1 = 10;
   }
 
- 
+  
   if ( distance2 >= 100 )
   {
     lcd.clear();
@@ -170,12 +178,12 @@ void loop()
     SendMessage1();
     lcd.clear();
   }
-  
+
   else
   {
+   
     lcd.clear();
     lcd.setCursor(0, 0);
-    
     lcd.print("TRASH LEVEL-");
     if (distance2 <= 99)
     {
@@ -189,11 +197,12 @@ void loop()
       lcd.setCursor(12, 0);
       lcd.print("FULL");
     }
-    
+   
   }
 
   if ( range == 0)
   {
+    
     lcd.clear();
     lcd.setCursor(0, 1);
     lcd.print("RAINING");
@@ -203,12 +212,12 @@ void loop()
   }
   if ( range == 1)
   {
-    //Serial.println("RAIN WARNING");
-    //range = 3;
+    
     lcd.clear();
     lcd.setCursor(0, 1);
     lcd.print("RAIN WARNING");
     delay(1000);
+    //range = 3;
     lcd.clear();
   }
 }
@@ -223,6 +232,7 @@ void ultrasonic1()
   digitalWrite(trigpin1, LOW);
   duration1 = pulseIn(echopin1, HIGH); 
   distance1 = duration1 / 58.2; 
+  
 }
 
 void ultrasonic2()
@@ -234,36 +244,41 @@ void ultrasonic2()
   delayMicroseconds(2);
   digitalWrite(trigpin2, LOW);
   duration2 = pulseIn(echopin2, HIGH); 
-  distance2 = duration2 / 58.2; 
+  distance2 = duration2 / 58.2;
   if ( distance2 >= 51)
   {
     distance2 = 50;
   }
   distance2 = map(distance2, 3, 50, 100, 0);
+  //  Serial.print(distance2);
+  //  Serial.println(" %");
 }
- void rainsensor()
+void rainsensor()
 {
   int sensorReading = analogRead(A2);
+  // map the sensor range (four options):
+  // ex: 'long int map(long int, long int, long int, long int, long int)'
   int range = map(sensorReading, sensorMin, sensorMax, 0, 3);
 
+  // range value:
   switch (range)
   {
-    case 0:  // Sensor getting wet
-              //Serial.println("Raining");
+    case 0:    // Sensor getting wet
+      Serial.println("Rain Warning");
       break;
     case 1:    // Sensor getting wet
-               //Serial.println("Rain Warning");
+      Serial.println("Rain Warning");
       break;
     case 2:    // Sensor dry - To shut this up delete the " Serial.println("Not Raining"); " below.
-               //0Serial.println("Not Raining");
+      Serial.println("Not Raining");
       break;
   }
-  delay(1); 
+  delay(1);  
 }
 
 void lcddisplay()
 {
-  lcd.print("Hello");
+  lcd.print("Hello, world!");
 }
 
 void motionsensor()
@@ -274,6 +289,8 @@ void motionsensor()
     if (pirState == LOW)
     {
       
+     Serial.println("Motion detected!");
+    
       pirState = HIGH;
     }
   }
@@ -281,6 +298,9 @@ void motionsensor()
   {
     if (pirState == HIGH)
     {
+     
+       Serial.println("Motion ended!");
+      
       pirState = LOW;
     }
   }
@@ -297,11 +317,12 @@ void waitMilliseconds(uint16_t msWait)
 
 void SendMessage1()
 {
+  
   Serial.println("AT+CMGF=1");    
   delay(1000);  
   Serial.println("AT+CMGS=\"+918610360497\"\r"); 
   delay(1000);
-  Serial.println("DUMPSTER FULL COME AND CLEAN AT SRM");
+  Serial.println("DUMPSTER FULL PLEASE COME AND CLEAN AT SRM");
   delay(100);
   Serial.println((char)26);
   delay(1000);
@@ -309,14 +330,14 @@ void SendMessage1()
 
 void SendMessage2()
 {
-   Serial.println("AT+CMGF=1");    
+ 
+  Serial.println("AT+CMGF=1");    
   delay(1000);  
   Serial.println("AT+CMGS=\"+918610360497\"\r"); 
   delay(1000);
   Serial.println("MOTION DETECTED INSIDE GARBAGE AT SRM");
   delay(100);
- 
   Serial.println((char)26);
   delay(1000);
-  
+ 
 }
